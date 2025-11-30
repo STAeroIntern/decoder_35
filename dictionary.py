@@ -1,3 +1,7 @@
+def sum_bytes(foi):
+    return sum(field[1] for field in foi)
+
+
 def extract_dic(msgtype):
     #Main Message List:
     if msgtype == '0109':
@@ -22,50 +26,63 @@ def extract_dic(msgtype):
             ("Message Length",1,'uint8',1),
             ('Nav Sensor Failure Bitfield',2,'uint16',1)
         ]
-        return field0001[2:]
+        results = sum_bytes(field0001)
+        return field0001, results
+
     if msgtype == '0002':
         field0002 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('RCC Failure Bitfield',2,'uint16',1)
-    
         ]
-        return field0002[2:]
+        results = sum_bytes(field0002)
+        return field0002, results
+
     if msgtype == '0003':
         field0003 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('RPDB Status Bitfield',1,'uint8',1)
         ]
-        return field0003[2:]
+        results = sum_bytes(field0003)
+        return field0003, results
+
     if msgtype == '0004':
         field0004 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('Battery Status Bitfield',2,'uint16',1)
         ]
-        return field0004[2:]
+        results = sum_bytes(field0004)
+        return field0004, results
+
     if msgtype == '0005':
         field0005 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('DroPort Status Bitfield',1,'uint8',1)
         ]
-        return field0005[2:]
+        results = sum_bytes(field0005)
+        return field0005, results
+
     if msgtype == '0006':
         field0006 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('UWB Failure Bitfield',1,'uint8',1)
         ]
-        return field0006[2:]
+        results = sum_bytes(field0006)
+        return field0006, results
+
     if msgtype == '0007':
         field0007 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('RTK Failure Bitfield',2,'uint16',1)
         ]
-        return field0007[2:]
+        results = sum_bytes(field0007)
+        return field0007, results
+
     if msgtype == '0008':
         field0008 = [
             ("Message Type",2,'uint16',''),
@@ -73,7 +90,9 @@ def extract_dic(msgtype):
             ('CA Status Bitfield',1,'uint8',1),
             ("CA Failure Bitfield",2,'uint16','1')
         ]
-        return field0008[2:]
+        results = sum_bytes(field0008)
+        return field0008, results
+
     if msgtype == '0009':
         field0009 = [
             ("Message Type",2,'uint16',''),
@@ -81,35 +100,45 @@ def extract_dic(msgtype):
             ('Flight Status Bitfield',1,'uint8',1),
             ('Motor Fail Id',1,'uint8','')
         ]
-        return field0009[2:]
+        results = sum_bytes(field0009)
+        return field0009, results
+
     if msgtype == '0010':
         field0010 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('Geofence Status Bitfield',1,'uint8',1)
         ]
-        return field0010[2:]
+        results = sum_bytes(field0010)
+        return field0010, results
+
     if msgtype == '0011':
         field0011 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('Flight Comms Status Bitfield',1,'uint8',1)
         ]
-        return field0011
+        results = sum_bytes(field0011)
+        return field0011, results
+
     if msgtype == '00FF':
         field00FF = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('IMU-Sensor Failure Bit',1,'uint8',1)
         ]
-        return field00FF[2:]
+        results = sum_bytes(field00FF)
+        return field00FF, results
+
     if msgtype == '1000':
-        field00FF = [
+        field1000 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('Sensor Source Bitfield',1,'uint16',1)
         ]
-        return field00FF[2:]
+        results = sum_bytes(field1000)
+        return field1000, results
+
     if msgtype == '1001':
         field1001 = [
             ("Message Type",2,'uint16',''),
@@ -127,7 +156,9 @@ def extract_dic(msgtype):
             ('Active IMU Ay MA',2,'int16',0.001),
             ('Active IMU Az MA',2,'int16',0.001)
         ]
-        return field1001[2:]
+        results = sum_bytes(field1001)
+        return field1001, results
+
     if msgtype == '1002':
         field1002 = [
             ("Message Type",2,'uint16',''),
@@ -141,15 +172,18 @@ def extract_dic(msgtype):
             ('Active Mag Heading',2,'int16',0.01),
             ('Active Mag Status',1,'uint8',1)
         ]
-        return field1002[2:]
+        results = sum_bytes(field1002)
+        return field1002, results
+
     if msgtype == '1003':
-        field1002 = [
+        field1003 = [
             ("Message Type",2,'uint16',''),
             ("Message Length",1,'uint8',1),
             ('Active Baro Pressure',4,'int32',0.01),
             ('Active Baro Altitude',4,'int32',0.01)
         ]
-        return field1002[2:]
+        return field1003, sum_bytes(field1003)
+
     if msgtype == '1004':
         field1004 = [
             ("Message Type",2,'uint16',''),
@@ -161,653 +195,703 @@ def extract_dic(msgtype):
             ('Active GNSS PDOP',1,'uint8',0.1),
             ('Active GNSS Hacc',1,'uint8',0.1),
             ('Active GNSS Vacc',1,'uint8',0.1),
-            ('Active GNSS Latitude',4,'int32',0.0000001),
-            ('Active GNSS longitudinal',4,'int32',0.0000001),
+            ('Active GNSS Latitude',4,'int32',1.0e-7),
+            ('Active GNSS Longitude',4,'int32',1.0e-7),
             ('Active GNSS Altitude',4,'int32',0.01),
             ('Active GNSS VelE',2,'int16',0.01),
             ('Active GNSS VelN',2,'int16',0.01),
-            ('Active GNSS VelN',2,'int16',0.01),
             ('Active GNSS VelU',2,'int16',0.01)
         ]
-        return field1004[2:]
+        return field1004, sum_bytes(field1004)
+
     if msgtype == '1010':
         field1010 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("WMM Status", 1, 'uint8', 1),
-            ("Mag Declination", 2, 'int16', 0.01),
-            ("Mag Inclination", 2, 'int16', 0.01),
-            ("Mag Total Intensity", 2, 'uint16', 0.1),
-            ("Mag Horizontal Intensity", 2, 'uint16', 0.1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("WMM Status",1,'uint8',1),
+            ("Mag Declination",2,'int16',0.01),
+            ("Mag Inclination",2,'int16',0.01),
+            ("Mag Total Intensity",2,'uint16',0.1),
+            ("Mag Horizontal Intensity",2,'uint16',0.1)
         ]
-        return field1010[2:]
+        return field1010, sum_bytes(field1010)
+
     if msgtype == '1100':
         field1100 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active NavSoln CBIT Bitfield", 8, 'uint64', 1),
-            ("Active Nav Alt Filter Source", 1, 'uint8', 1),
-            ("Active Nav Yaw Filter Source", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active NavSoln CBIT Bitfield",8,'uint64',1),
+            ("Active Nav Alt Filter Source",1,'uint8',1),
+            ("Active Nav Yaw Filter Source",1,'uint8',1)
         ]
-        return field1100[2:]
+        return field1100, sum_bytes(field1100)
+
     if msgtype == '1101':
         field1101 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active Nav Rate P", 2, 'int16', 0.01),
-            ("Active Nav Rate Q", 2, 'int16', 0.01),
-            ("Active Nav Rate R", 2, 'int16', 0.01),
-            ("Active Nav Acc X", 2, 'int16', 0.001),
-            ("Active Nav Acc Y", 2, 'int16', 0.001),
-            ("Active Nav Acc Z", 2, 'int16', 0.001),
-            ("Active Nav Acc E", 2, 'int16', 0.001),
-            ("Active Nav Acc N", 2, 'int16', 0.001),
-            ("Active Nav Acc U", 2, 'int16', 0.001),
-            ("Active Nav Gravity", 2, 'int16', 0.001)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active Nav Rate P",2,'int16',0.01),
+            ("Active Nav Rate Q",2,'int16',0.01),
+            ("Active Nav Rate R",2,'int16',0.01),
+            ("Active Nav Acc X",2,'int16',0.001),
+            ("Active Nav Acc Y",2,'int16',0.001),
+            ("Active Nav Acc Z",2,'int16',0.001),
+            ("Active Nav Acc E",2,'int16',0.001),
+            ("Active Nav Acc N",2,'int16',0.001),
+            ("Active Nav Acc U",2,'int16',0.001),
+            ("Active Nav Gravity",2,'int16',0.001)
         ]
-        return field1101[2:]
+        return field1101, sum_bytes(field1101)
+
     if msgtype == '1102':
         field1102 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active Nav Roll", 2, 'int16', 0.01),
-            ("Active Nav Pitch", 2, 'int16', 0.01),
-            ("Active Nav Yaw", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active Nav Roll",2,'int16',0.01),
+            ("Active Nav Pitch",2,'int16',0.01),
+            ("Active Nav Yaw",2,'int16',0.01)
         ]
-        return field1102[2:]
+        return field1102, sum_bytes(field1102)
+
     if msgtype == '1103':
         field1103 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active Nav VelE", 2, 'int16', 0.01),
-            ("Active Nav VelN", 2, 'int16', 0.01),
-            ("Active Nav VelU", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active Nav VelE",2,'int16',0.01),
+            ("Active Nav VelN",2,'int16',0.01),
+            ("Active Nav VelU",2,'int16',0.01)
         ]
-        return field1103[2:]
+        return field1103, sum_bytes(field1103)
+
     if msgtype == '1104':
         field1104 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active Nav Latitude", 4, 'int32', 1.0e-7),
-            ("Active Nav Longitude", 4, 'int32', 1.0e-7),
-            ("Active Nav Altitude (Uncorrected)", 4, 'int32', 0.01),
-            ("Active Nav Altitude (AMSL)", 4, 'int32', 0.01),
-            ("Active Nav Height (AGL)", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active Nav Latitude",4,'int32',1.0e-7),
+            ("Active Nav Longitude",4,'int32',1.0e-7),
+            ("Active Nav Altitude (Uncorrected)",4,'int32',0.01),
+            ("Active Nav Altitude (AMSL)",4,'int32',0.01),
+            ("Active Nav Height (AGL)",4,'int32',0.01)
         ]
-        return field1104[2:]
+        return field1104, sum_bytes(field1104)
+
     if msgtype == '1105':
         field1105 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active Nav Alt Correction Src", 1, 'uint8', 1),
-            ("Active Nav Alt Correction", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active Nav Alt Correction Src",1,'uint8',1),
+            ("Active Nav Alt Correction",4,'int32',0.01)
         ]
-        return field1105[2:]
+        return field1105, sum_bytes(field1105)
+
     if msgtype == '1111':
         field1111 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Gnd Station Ref", 1, 'uint8', 1),
-            ("Gnd Pressure Ref", 4, 'uint32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Gnd Station Ref",1,'uint8',1),
+            ("Gnd Pressure Ref",4,'uint32',0.01)
         ]
-        return field1111[2:]
+        return field1111, sum_bytes(field1111)
+
     if msgtype == '1112':
         field1112 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Gnd Elev Ref Src", 1, 'uint8', 1),
-            ("Gnd Elev Ref", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Gnd Elev Ref Src",1,'uint8',1),
+            ("Gnd Elev Ref",4,'int32',0.01)
         ]
-        return field1112[2:]
+        return field1112, sum_bytes(field1112)
+
     if msgtype == '1113':
         field1113 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Takeoff Point Elevation", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Takeoff Point Elevation",4,'int32',0.01)
         ]
-        return field1113[2:]
+        return field1113, sum_bytes(field1113)
+
     if msgtype == '1200':
         field1200 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Target P", 2, 'int16', 0.01),
-            ("Target Q", 2, 'int16', 0.01),
-            ("Target R", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Target P",2,'int16',0.01),
+            ("Target Q",2,'int16',0.01),
+            ("Target R",2,'int16',0.01)
         ]
-        return field1200[2:] 
+        return field1200, sum_bytes(field1200)
+
     if msgtype == '1201':
         field1201 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Target Roll", 2, 'int16', 0.01),
-            ("Target Pitch", 2, 'int16', 0.01),
-            ("Target Yaw", 2, 'int16', 0.01)
-        ] 
-        return field1201[2:]
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Target Roll",2,'int16',0.01),
+            ("Target Pitch",2,'int16',0.01),
+            ("Target Yaw",2,'int16',0.01)
+        ]
+        return field1201, sum_bytes(field1201)
+
     if msgtype == '1202':
         field1202 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Target VelE", 2, 'int16', 0.01),
-            ("Target VelN", 2, 'int16', 0.01),
-            ("Target VelU", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Target VelE",2,'int16',0.01),
+            ("Target VelN",2,'int16',0.01),
+            ("Target VelU",2,'int16',0.01)
         ]
-        return field1202[2:] 
+        return field1202, sum_bytes(field1202)
+
     if msgtype == '1203':
         field1203 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Target Latitude", 4, 'int32', 0.0000001),
-            ("Target Longitude", 4, 'int32', 0.0000001),
-            ("Target Altitude", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Target Latitude",4,'int32',0.0000001),
+            ("Target Longitude",4,'int32',0.0000001),
+            ("Target Altitude",4,'int32',0.01)
         ]
-        return field1203[2:] 
+        return field1203, sum_bytes(field1203)
     if msgtype == '1301':
         field1301 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Ctrl Effort Roll", 2, 'int16', 0.1),
-            ("Ctrl Effort Pitch", 2, 'int16', 0.1),
-            ("Ctrl Effort Yaw", 2, 'int16', 0.1),
-            ("Ctrl Effort Throttle", 2, 'uint16', 0.1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Ctrl Effort Roll",2,'int16',0.1),
+            ("Ctrl Effort Pitch",2,'int16',0.1),
+            ("Ctrl Effort Yaw",2,'int16',0.1),
+            ("Ctrl Effort Throttle",2,'uint16',0.1)
         ]
-        return field1301[2:]     
+        return field1301, sum_bytes(field1301)
+
     if msgtype == '1302':
         field1302 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Motor M1 PWM", 2, 'uint16', 0.1),
-            ("Motor M2 PWM", 2, 'uint16', 0.1),
-            ("Motor M3 PWM", 2, 'uint16', 0.1),
-            ("Motor M4 PWM", 2, 'uint16', 0.1),
-            ("Motor M5 PWM", 2, 'uint16', 0.1),
-            ("Motor M6 PWM", 2, 'uint16', 0.1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Motor M1 PWM",2,'uint16',0.1),
+            ("Motor M2 PWM",2,'uint16',0.1),
+            ("Motor M3 PWM",2,'uint16',0.1),
+            ("Motor M4 PWM",2,'uint16',0.1),
+            ("Motor M5 PWM",2,'uint16',0.1),
+            ("Motor M6 PWM",2,'uint16',0.1)
         ]
-        return field1302[2:]    
+        return field1302, sum_bytes(field1302)
+
     if msgtype == '2001':
         field2001 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU0 Gx", 2, 'int16', 0.01),
-            ("IMU0 Gy", 2, 'int16', 0.01),
-            ("IMU0 Gz", 2, 'int16', 0.01),
-            ("IMU0 Ax", 2, 'int16', 0.001),
-            ("IMU0 Ay", 2, 'int16', 0.001),
-            ("IMU0 Az", 2, 'int16', 0.001),
-            ("IMU0 Gx MA", 2, 'int16', 0.01),
-            ("IMU0 Gy MA", 2, 'int16', 0.01),
-            ("IMU0 Gz MA", 2, 'int16', 0.01),
-            ("IMU0 Ax MA", 2, 'int16', 0.001),
-            ("IMU0 Ay MA", 2, 'int16', 0.001),
-            ("IMU0 Az MA", 2, 'int16', 0.001)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU0 Gx",2,'int16',0.01),
+            ("IMU0 Gy",2,'int16',0.01),
+            ("IMU0 Gz",2,'int16',0.01),
+            ("IMU0 Ax",2,'int16',0.001),
+            ("IMU0 Ay",2,'int16',0.001),
+            ("IMU0 Az",2,'int16',0.001),
+            ("IMU0 Gx MA",2,'int16',0.01),
+            ("IMU0 Gy MA",2,'int16',0.01),
+            ("IMU0 Gz MA",2,'int16',0.01),
+            ("IMU0 Ax MA",2,'int16',0.001),
+            ("IMU0 Ay MA",2,'int16',0.001),
+            ("IMU0 Az MA",2,'int16',0.001)
         ]
-        return field2001[2:]    
+        return field2001, sum_bytes(field2001)
+
     if msgtype == '2002':
         field2002 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU1 Gx", 2, 'int16', 0.01),
-            ("IMU1 Gy", 2, 'int16', 0.01),
-            ("IMU1 Gz", 2, 'int16', 0.01),
-            ("IMU1 Ax", 2, 'int16', 0.001),
-            ("IMU1 Ay", 2, 'int16', 0.001),
-            ("IMU1 Az", 2, 'int16', 0.001),
-            ("IMU1 Gx MA", 2, 'int16', 0.01),
-            ("IMU1 Gy MA", 2, 'int16', 0.01),
-            ("IMU1 Gz MA", 2, 'int16', 0.01),
-            ("IMU1 Ax MA", 2, 'int16', 0.001),
-            ("IMU1 Ay MA", 2, 'int16', 0.001),
-            ("IMU1 Az MA", 2, 'int16', 0.001)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU1 Gx",2,'int16',0.01),
+            ("IMU1 Gy",2,'int16',0.01),
+            ("IMU1 Gz",2,'int16',0.01),
+            ("IMU1 Ax",2,'int16',0.001),
+            ("IMU1 Ay",2,'int16',0.001),
+            ("IMU1 Az",2,'int16',0.001),
+            ("IMU1 Gx MA",2,'int16',0.01),
+            ("IMU1 Gy MA",2,'int16',0.01),
+            ("IMU1 Gz MA",2,'int16',0.01),
+            ("IMU1 Ax MA",2,'int16',0.001),
+            ("IMU1 Ay MA",2,'int16',0.001),
+            ("IMU1 Az MA",2,'int16',0.001)
         ]
-        return field2002[2:]   
+        return field2002, sum_bytes(field2002)
+
     if msgtype == '2003':
         field2003 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU2 Gx", 2, 'int16', 0.01),
-            ("IMU2 Gy", 2, 'int16', 0.01),
-            ("IMU2 Gz", 2, 'int16', 0.01),
-            ("IMU2 Ax", 2, 'int16', 0.001),
-            ("IMU2 Ay", 2, 'int16', 0.001),
-            ("IMU2 Az", 2, 'int16', 0.001),
-            ("IMU2 Gx MA", 2, 'int16', 0.01),
-            ("IMU2 Gy MA", 2, 'int16', 0.01),
-            ("IMU2 Gz MA", 2, 'int16', 0.01),
-            ("IMU2 Ax MA", 2, 'int16', 0.001),
-            ("IMU2 Ay MA", 2, 'int16', 0.001),
-            ("IMU2 Az MA", 2, 'int16', 0.001)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU2 Gx",2,'int16',0.01),
+            ("IMU2 Gy",2,'int16',0.01),
+            ("IMU2 Gz",2,'int16',0.01),
+            ("IMU2 Ax",2,'int16',0.001),
+            ("IMU2 Ay",2,'int16',0.001),
+            ("IMU2 Az",2,'int16',0.001),
+            ("IMU2 Gx MA",2,'int16',0.01),
+            ("IMU2 Gy MA",2,'int16',0.01),
+            ("IMU2 Gz MA",2,'int16',0.01),
+            ("IMU2 Ax MA",2,'int16',0.001),
+            ("IMU2 Ay MA",2,'int16',0.001),
+            ("IMU2 Az MA",2,'int16',0.001)
         ]
-        return field2003[2:]   
+        return field2003, sum_bytes(field2003)
+
     if msgtype == '2101':
         field2101 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Mag0 Mx", 2, 'int16', 0.1),
-            ("Mag0 My", 2, 'int16', 0.1),
-            ("Mag0 Mz", 2, 'int16', 0.1),
-            ("Mag0 Heading", 2, 'int16', 0.01),
-            ("Mag0 Status", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Mag0 Mx",2,'int16',0.1),
+            ("Mag0 My",2,'int16',0.1),
+            ("Mag0 Mz",2,'int16',0.1),
+            ("Mag0 Heading",2,'int16',0.01),
+            ("Mag0 Status",1,'uint8',1)
         ]
-        return field2101[2:]   
+        return field2101, sum_bytes(field2101)
+
     if msgtype == '2102':
         field2102 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Mag1 Mx", 2, 'int16', 0.1),
-            ("Mag1 My", 2, 'int16', 0.1),
-            ("Mag1 Mz", 2, 'int16', 0.1),
-            ("Mag1 Heading", 2, 'int16', 0.01),
-            ("Mag1 Status", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Mag1 Mx",2,'int16',0.1),
+            ("Mag1 My",2,'int16',0.1),
+            ("Mag1 Mz",2,'int16',0.1),
+            ("Mag1 Heading",2,'int16',0.01),
+            ("Mag1 Status",1,'uint8',1)
         ]
-        return field2102[2:]   
+        return field2102, sum_bytes(field2102)
+
     if msgtype == '2103':
         field2103 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Mag2 Mx", 2, 'int16', 0.1),
-            ("Mag2 My", 2, 'int16', 0.1),
-            ("Mag2 Mz", 2, 'int16', 0.1),
-            ("Mag2 Heading", 2, 'int16', 0.01),
-            ("Mag2 Status", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Mag2 Mx",2,'int16',0.1),
+            ("Mag2 My",2,'int16',0.1),
+            ("Mag2 Mz",2,'int16',0.1),
+            ("Mag2 Heading",2,'int16',0.01),
+            ("Mag2 Status",1,'uint8',1)
         ]
-        return field2103[2:]   
+        return field2103, sum_bytes(field2103)
+
     if msgtype == '2201':
         field2201 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Baro0 Press", 4, 'int32', 0.01),
-            ("Baro0 Altitude", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Baro0 Press",4,'int32',0.01),
+            ("Baro0 Altitude",4,'int32',0.01)
         ]
-        return field2201[2:]   
+        return field2201, sum_bytes(field2201)
+
     if msgtype == '2202':
         field2202 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Baro1 Press", 4, 'int32', 0.01),
-            ("Baro1 Altitude", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Baro1 Press",4,'int32',0.01),
+            ("Baro1 Altitude",4,'int32',0.01)
         ]
-        return field2202[2:]   
+        return field2202, sum_bytes(field2202)
+
     if msgtype == '2203':
         field2203 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("Baro2 Press", 4, 'int32', 0.01),
-            ("Baro2 Altitude", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Baro2 Press",4,'int32',0.01),
+            ("Baro2 Altitude",4,'int32',0.01)
         ]
-        return field2203[2:]   
+        return field2203, sum_bytes(field2203)
+
     if msgtype == '2301':
         field2301 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("GNSS0 GPS ToW", 4, 'uint32', 0.001),
-            ("GNSS0 Msg Latency", 4, 'uint32', 1),
-            ("GNSS0 Fix Status", 1, 'uint8', 1),
-            ("GNSS0 Nbr Satellite", 1, 'uint8', 1),
-            ("GNSS0 PDOP", 1, 'uint8', 0.1),
-            ("GNSS0 Hacc", 1, 'uint8', 0.1),
-            ("GNSS0 Vacc", 1, 'uint8', 0.1),
-            ("GNSS0 Latitude", 4, 'int32', 1.0e-7),
-            ("GNSS0 Longitude", 4, 'int32', 1.0e-7),
-            ("GNSS0 Altitude", 4, 'int32', 0.01),
-            ("GNSS0 VelE", 2, 'int16', 0.01),
-            ("GNSS0 VelN", 2, 'int16', 0.01),
-            ("GNSS0 VelU", 2, 'int16', 0.01)
-        ] 
-        return field2301[2:] 
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("GNSS0 GPS ToW",4,'uint32',0.001),
+            ("GNSS0 Msg Latency",4,'uint32',1),
+            ("GNSS0 Fix Status",1,'uint8',1),
+            ("GNSS0 Nbr Satellite",1,'uint8',1),
+            ("GNSS0 PDOP",1,'uint8',0.1),
+            ("GNSS0 Hacc",1,'uint8',0.1),
+            ("GNSS0 Vacc",1,'uint8',0.1),
+            ("GNSS0 Latitude",4,'int32',1e-7),
+            ("GNSS0 Longitude",4,'int32',1e-7),
+            ("GNSS0 Altitude",4,'int32',0.01),
+            ("GNSS0 VelE",2,'int16',0.01),
+            ("GNSS0 VelN",2,'int16',0.01),
+            ("GNSS0 VelU",2,'int16',0.01)
+        ]
+        return field2301, sum_bytes(field2301)
+
     if msgtype == '2302':
         field2302 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("GNSS1 GPS ToW", 4, 'uint32', 0.001),
-            ("GNSS1 Msg Latency", 4, 'uint32', 1),
-            ("GNSS1 Fix Status", 1, 'uint8', 1),
-            ("GNSS1 Nbr Satellite", 1, 'uint8', 1),
-            ("GNSS1 PDOP", 1, 'uint8', 0.1),
-            ("GNSS1 Hacc", 1, 'uint8', 0.1),
-            ("GNSS1 Vacc", 1, 'uint8', 0.1),
-            ("GNSS1 Latitude", 4, 'int32', 1.0e-7),
-            ("GNSS1 Longitude", 4, 'int32', 1.0e-7),
-            ("GNSS1 Altitude", 4, 'int32', 0.01),
-            ("GNSS1 VelE", 2, 'int16', 0.01),
-            ("GNSS1 VelN", 2, 'int16', 0.01),
-            ("GNSS1 VelU", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("GNSS1 GPS ToW",4,'uint32',0.001),
+            ("GNSS1 Msg Latency",4,'uint32',1),
+            ("GNSS1 Fix Status",1,'uint8',1),
+            ("GNSS1 Nbr Satellite",1,'uint8',1),
+            ("GNSS1 PDOP",1,'uint8',0.1),
+            ("GNSS1 Hacc",1,'uint8',0.1),
+            ("GNSS1 Vacc",1,'uint8',0.1),
+            ("GNSS1 Latitude",4,'int32',1e-7),
+            ("GNSS1 Longitude",4,'int32',1e-7),
+            ("GNSS1 Altitude",4,'int32',0.01),
+            ("GNSS1 VelE",2,'int16',0.01),
+            ("GNSS1 VelN",2,'int16',0.01),
+            ("GNSS1 VelU",2,'int16',0.01)
         ]
-        return field2302[2:]  
+        return field2302, sum_bytes(field2302)
+
     if msgtype == '2303':
         field2303 = [
-            ("Message Type", 2, 'uint16', ''),
-            ("Message Length", 1, 'uint8', 1),
-            ("GNSS2 GPS ToW", 4, 'uint32', 0.001),
-            ("GNSS2 Msg Latency", 4, 'uint32', 1),
-            ("GNSS2 Fix Status", 1, 'uint8', 1),
-            ("GNSS2 Nbr Satellite", 1, 'uint8', 1),
-            ("GNSS2 PDOP", 1, 'uint8', 0.1),
-            ("GNSS2 Hacc", 1, 'uint8', 0.1),
-            ("GNSS2 Vacc", 1, 'uint8', 0.1),
-            ("GNSS2 Latitude", 4, 'int32', 1.0e-7),
-            ("GNSS2 Longitude", 4, 'int32', 1.0e-7),
-            ("GNSS2 Altitude", 4, 'int32', 0.01),
-            ("GNSS2 VelE", 2, 'int16', 0.01),
-            ("GNSS2 VelN", 2, 'int16', 0.01),
-            ("GNSS2 VelU", 2, 'int16', 0.01)
-        ] 
-        return field2303[2:]
-    # Lidar0 Distance Data
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("GNSS2 GPS ToW",4,'uint32',0.001),
+            ("GNSS2 Msg Latency",4,'uint32',1),
+            ("GNSS2 Fix Status",1,'uint8',1),
+            ("GNSS2 Nbr Satellite",1,'uint8',1),
+            ("GNSS2 PDOP",1,'uint8',0.1),
+            ("GNSS2 Hacc",1,'uint8',0.1),
+            ("GNSS2 Vacc",1,'uint8',0.1),
+            ("GNSS2 Latitude",4,'int32',1e-7),
+            ("GNSS2 Longitude",4,'int32',1e-7),
+            ("GNSS2 Altitude",4,'int32',0.01),
+            ("GNSS2 VelE",2,'int16',0.01),
+            ("GNSS2 VelN",2,'int16',0.01),
+            ("GNSS2 VelU",2,'int16',0.01)
+        ]
+        return field2303, sum_bytes(field2303)
+
     if msgtype == '2401':
         field2401 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Lidar0 Distance", 2, 'uint16', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Lidar0 Distance",2,'uint16',1)
         ]
-        return field2401[2:]
-    # Front Lower Radar Data
+        return field2401, sum_bytes(field2401)
+
     if msgtype == '2501':
         field2501 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Radar0L Distance", 2, 'uint16', 0.01),
-            ("Radar0L Bearing", 2, 'int16', 0.01),
-            ("Radar0L Relative Velocity", 2, 'int16', 0.01),
-            ("Radar0L Relative Heading", 2, 'int16', 0.01),
-            ("Radar0L Filtered Obstacle Distance", 2, 'uint16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Radar0L Distance",2,'uint16',0.01),
+            ("Radar0L Bearing",2,'int16',0.01),
+            ("Radar0L Relative Velocity",2,'int16',0.01),
+            ("Radar0L Relative Heading",2,'int16',0.01),
+            ("Radar0L Filtered Obstacle Distance",2,'uint16',0.01)
         ]
-        return field2501[2:]
-    # Front Right Radar Data
+        return field2501, sum_bytes(field2501)
+
     if msgtype == '2502':
         field2502 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Radar60 Distance", 2, 'uint16', 0.01),
-            ("Radar60 Bearing", 2, 'int16', 0.01),
-            ("Radar60 Relative Velocity", 2, 'int16', 0.01),
-            ("Radar60 Relative Heading", 2, 'int16', 0.01),
-            ("Radar60 Filtered Obstacle Distance", 2, 'uint16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Radar60 Distance",2,'uint16',0.01),
+            ("Radar60 Bearing",2,'int16',0.01),
+            ("Radar60 Relative Velocity",2,'int16',0.01),
+            ("Radar60 Relative Heading",2,'int16',0.01),
+            ("Radar60 Filtered Obstacle Distance",2,'uint16',0.01)
         ]
-        return field2502[2:]
-    # Rear Right Radar Data
+        return field2502, sum_bytes(field2502)
+
     if msgtype == '2503':
         field2503 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Radar120 Distance", 2, 'uint16', 0.01),
-            ("Radar120 Bearing", 2, 'int16', 0.01),
-            ("Radar120 Relative Velocity", 2, 'int16', 0.01),
-            ("Radar120 Relative Heading", 2, 'int16', 0.01),
-            ("Radar120 Filtered Obstacle Distance", 2, 'uint16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Radar120 Distance",2,'uint16',0.01),
+            ("Radar120 Bearing",2,'int16',0.01),
+            ("Radar120 Relative Velocity",2,'int16',0.01),
+            ("Radar120 Relative Heading",2,'int16',0.01),
+            ("Radar120 Filtered Obstacle Distance",2,'uint16',0.01)
         ]
-        return field2503[2:]
-    # Rear Radar Data
+        return field2503, sum_bytes(field2503)
+
     if msgtype == '2504':
         field2504 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Radar180 Distance", 2, 'uint16', 0.01),
-            ("Radar180 Bearing", 2, 'int16', 0.01),
-            ("Radar180 Relative Velocity", 2, 'int16', 0.01),
-            ("Radar180 Relative Heading", 2, 'int16', 0.01),
-            ("Radar180 Filtered Obstacle Distance", 2, 'uint16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Radar180 Distance",2,'uint16',0.01),
+            ("Radar180 Bearing",2,'int16',0.01),
+            ("Radar180 Relative Velocity",2,'int16',0.01),
+            ("Radar180 Relative Heading",2,'int16',0.01),
+            ("Radar180 Filtered Obstacle Distance",2,'uint16',0.01)
         ]
-        return field2504[2:]
-    # Rear Left Radar Data
+        return field2504, sum_bytes(field2504)
+
     if msgtype == '2505':
         field2505 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Radar240 Distance", 2, 'uint16', 0.01),
-            ("Radar240 Bearing", 2, 'int16', 0.01),
-            ("Radar240 Relative Velocity", 2, 'int16', 0.01),
-            ("Radar240 Relative Heading", 2, 'int16', 0.01),
-            ("Radar240 Filtered Obstacle Distance", 2, 'uint16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Radar240 Distance",2,'uint16',0.01),
+            ("Radar240 Bearing",2,'int16',0.01),
+            ("Radar240 Relative Velocity",2,'int16',0.01),
+            ("Radar240 Relative Heading",2,'int16',0.01),
+            ("Radar240 Filtered Obstacle Distance",2,'uint16',0.01)
         ]
-        return field2505[2:]
-    # Front Left Radar Data
+        return field2505, sum_bytes(field2505)
+
     if msgtype == '2506':
         field2506 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Radar300 Distance", 2, 'uint16', 0.01),
-            ("Radar300 Bearing", 2, 'int16', 0.01),
-            ("Radar300 Relative Velocity", 2, 'int16', 0.01),
-            ("Radar300 Relative Heading", 2, 'int16', 0.01),
-            ("Radar300 Filtered Obstacle Distance", 2, 'uint16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Radar300 Distance",2,'uint16',0.01),
+            ("Radar300 Bearing",2,'int16',0.01),
+            ("Radar300 Relative Velocity",2,'int16',0.01),
+            ("Radar300 Relative Heading",2,'int16',0.01),
+            ("Radar300 Filtered Obstacle Distance",2,'uint16',0.01)
         ]
-        return field2506[2:]
-    # Front Upper Radar Data
+        return field2506, sum_bytes(field2506)
+
     if msgtype == '2507':
         field2507 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Radar0U Distance", 2, 'uint16', 0.01),
-            ("Radar0U Bearing", 2, 'int16', 0.01),
-            ("Radar0U Relative Velocity", 2, 'int16', 0.01),
-            ("Radar0U Relative Heading", 2, 'int16', 0.01),
-            ("Radar0U Filtered Obstacle Distance", 2, 'uint16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Radar0U Distance",2,'uint16',0.01),
+            ("Radar0U Bearing",2,'int16',0.01),
+            ("Radar0U Relative Velocity",2,'int16',0.01),
+            ("Radar0U Relative Heading",2,'int16',0.01),
+            ("Radar0U Filtered Obstacle Distance",2,'uint16',0.01)
         ]
-        return field2507[2:]
-    # Pri IMU Nav Orientation Data
+        return field2507, sum_bytes(field2507)
+
+        # Pri IMU Nav Orientation Data
     if msgtype == '3001':
         field3001 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU0 Nav Roll", 2, 'int16', 0.01),
-            ("IMU0 Nav Pitch", 2, 'int16', 0.01),
-            ("IMU0 Nav Yaw", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU0 Nav Roll",2,'int16',0.01),
+            ("IMU0 Nav Pitch",2,'int16',0.01),
+            ("IMU0 Nav Yaw",2,'int16',0.01)
         ]
-        return field3001[2:]
+        return field3001, sum_bytes(field3001)
+
     # Sec IMU Nav Orientation Data
     if msgtype == '3002':
         field3002 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU1 Nav Roll", 2, 'int16', 0.01),
-            ("IMU1 Nav Pitch", 2, 'int16', 0.01),
-            ("IMU1 Nav Yaw", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU1 Nav Roll",2,'int16',0.01),
+            ("IMU1 Nav Pitch",2,'int16',0.01),
+            ("IMU1 Nav Yaw",2,'int16',0.01)
         ]
-        return field3002[2:]
+        return field3002, sum_bytes(field3002)
+
     # Ter IMU Nav Orientation Data
     if msgtype == '3003':
         field3003 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU2 Nav Roll", 2, 'int16', 0.01),
-            ("IMU2 Nav Pitch", 2, 'int16', 0.01),
-            ("IMU2 Nav Yaw", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU2 Nav Roll",2,'int16',0.01),
+            ("IMU2 Nav Pitch",2,'int16',0.01),
+            ("IMU2 Nav Yaw",2,'int16',0.01)
         ]
-        return field3003[2:]
+        return field3003, sum_bytes(field3003)
+
     # Pri IMU Nav Velocity Data
     if msgtype == '3004':
         field3004 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU0 Nav VelE", 2, 'int16', 0.01),
-            ("IMU0 Nav VelN", 2, 'int16', 0.01),
-            ("IMU0 Nav VelU", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU0 Nav VelE",2,'int16',0.01),
+            ("IMU0 Nav VelN",2,'int16',0.01),
+            ("IMU0 Nav VelU",2,'int16',0.01)
         ]
-        return field3004[2:]
+        return field3004, sum_bytes(field3004)
+
     # Sec IMU Nav Velocity Data
     if msgtype == '3005':
         field3005 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU1 Nav VelE", 2, 'int16', 0.01),
-            ("IMU1 Nav VelN", 2, 'int16', 0.01),
-            ("IMU1 Nav VelU", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU1 Nav VelE",2,'int16',0.01),
+            ("IMU1 Nav VelN",2,'int16',0.01),
+            ("IMU1 Nav VelU",2,'int16',0.01)
         ]
-        return field3005[2:]
+        return field3005, sum_bytes(field3005)
+
     # Ter IMU Nav Velocity Data
     if msgtype == '3006':
         field3006 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU2 Nav VelE", 2, 'int16', 0.01),
-            ("IMU2 Nav VelN", 2, 'int16', 0.01),
-            ("IMU2 Nav VelU", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU2 Nav VelE",2,'int16',0.01),
+            ("IMU2 Nav VelN",2,'int16',0.01),
+            ("IMU2 Nav VelU",2,'int16',0.01)
         ]
-        return field3006[2:]
+        return field3006, sum_bytes(field3006)
+
     # Pri IMU Nav Position Data
     if msgtype == '3007':
         field3007 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU0 Nav Latitude", 4, 'int32', 1e-7),
-            ("IMU0 Nav Longitude", 4, 'int32', 1e-7),
-            ("IMU0 Nav Altitude", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU0 Nav Latitude",4,'int32',1e-7),
+            ("IMU0 Nav Longitude",4,'int32',1e-7),
+            ("IMU0 Nav Altitude",4,'int32',0.01)
         ]
-        return field3007[2:]
+        return field3007, sum_bytes(field3007)
+
     # Sec IMU Nav Position Data
     if msgtype == '3008':
         field3008 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU1 Nav Latitude", 4, 'int32', 1e-7),
-            ("IMU1 Nav Longitude", 4, 'int32', 1e-7),
-            ("IMU1 Nav Altitude", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU1 Nav Latitude",4,'int32',1e-7),
+            ("IMU1 Nav Longitude",4,'int32',1e-7),
+            ("IMU1 Nav Altitude",4,'int32',0.01)
         ]
-        return field3008[2:]
+        return field3008, sum_bytes(field3008)
+
     # Ter IMU Nav Position Data
     if msgtype == '3009':
         field3009 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU2 Nav Latitude", 4, 'int32', 1e-7),
-            ("IMU2 Nav Longitude", 4, 'int32', 1e-7),
-            ("IMU2 Nav Altitude", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU2 Nav Latitude",4,'int32',1e-7),
+            ("IMU2 Nav Longitude",4,'int32',1e-7),
+            ("IMU2 Nav Altitude",4,'int32',0.01)
         ]
-        return field3009[2:]
+        return field3009, sum_bytes(field3009)
+
     # Active FCC Nav Rdy Bitfield
     if msgtype == '3F00':
         field3F00 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active FCC Nav Rdy Bitfield", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active FCC Nav Rdy Bitfield",1,'uint8',1)
         ]
-        return field3F00
+        return field3F00, sum_bytes(field3F00)
+
     # Pri IMU Nav Rdy Bitfield
     if msgtype == '3F01':
         field3F01 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU0 Nav Rdy Bitfield", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU0 Nav Rdy Bitfield",1,'uint8',1)
         ]
-        return field3F01[2:]
+        return field3F01, sum_bytes(field3F01)
+
     # Sec IMU Nav Rdy Bitfield
     if msgtype == '3F02':
         field3F02 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU1 Nav Rdy Bitfield", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU1 Nav Rdy Bitfield",1,'uint8',1)
         ]
-        return field3F02[2:]
+        return field3F02, sum_bytes(field3F02)
+
     # Ter IMU Nav Rdy Bitfield
     if msgtype == '3F03':
         field3F03 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("IMU2 Nav Rdy Bitfield", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("IMU2 Nav Rdy Bitfield",1,'uint8',1)
         ]
-        return field3F03[2:]
+        return field3F03, sum_bytes(field3F03)
+
     # Sec FCC Nav Rdy Bitfield
     if msgtype == '3F04':
         field3F04 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Sec FCC Nav Rdy Bitfield", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Sec FCC Nav Rdy Bitfield",1,'uint8',1)
         ]
-        return field3F04[2:]    
+        return field3F04, sum_bytes(field3F04)
+
     # Precision Landing Status Info Data
     if msgtype == '4000':
         field4000 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("DroPort Mode", 1, 'uint8', 1),
-            ("DroPort Status", 1, 'uint8', 1),
-            ("Precision Landing Sensor Source", 1, 'uint8', 1),
-            ("Precision Landing Status", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("DroPort Mode",1,'uint8',1),
+            ("DroPort Status",1,'uint8',1),
+            ("Precision Landing Sensor Source",1,'uint8',1),
+            ("Precision Landing Status",1,'uint8',1)
         ]
-        return field4000[2:]
+        return field4000, sum_bytes(field4000)
+
     # DroPort Pairing Info Data
     if msgtype == '4001':
         field4001 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("DroPort Info Status", 1, 'uint8', 1),
-            ("Paired DroPort Type", 1, 'uint8', 1),
-            ("Paired DroPort ID", 2, 'uint16', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("DroPort Info Status",1,'uint8',1),
+            ("Paired DroPort Type",1,'uint8',1),
+            ("Paired DroPort ID",2,'uint16',1)
         ]
-        return field4001[2:]
+        return field4001, sum_bytes(field4001)
+
     # Base Station Pairing Info Data
     if msgtype == '4002':
         field4002 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Base Station Info Status", 1, 'uint8', 1),
-            ("Paired Base Station Type", 1, 'uint8', 1),
-            ("Paired Base Station ID", 2, 'uint16', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Base Station Info Status",1,'uint8',1),
+            ("Paired Base Station Type",1,'uint8',1),
+            ("Paired Base Station ID",2,'uint16',1)
         ]
-        return field4002[2:]
+        return field4002, sum_bytes(field4002)
+
     # UWB System Status Info Data
     if msgtype == '4101':
         field4101 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("UWB System Status", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("UWB System Status",1,'uint8',1)
         ]
-        return field4101[2:]
+        return field4101, sum_bytes(field4101)
+
     # UWB Baseline Offset Info Data
     if msgtype == '4102':
         field4102 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("UWB Baseline Offset X", 2, 'int16', 0.01),
-            ("UWB Baseline Offset Y", 2, 'int16', 0.01),
-            ("UWB Baseline Altitude", 2, 'int16', 0.1),
-            ("UWB Baseline Heading", 2, 'int16', 0.1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("UWB Baseline Offset X",2,'int16',0.01),
+            ("UWB Baseline Offset Y",2,'int16',0.01),
+            ("UWB Baseline Altitude",2,'int16',0.1),
+            ("UWB Baseline Heading",2,'int16',0.1)
         ]
-        return field4102[2:]
+        return field4102, sum_bytes(field4102)
+
     # Active UWB Air Node Data
     if msgtype == '4111':
         field4111 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active UWB Ant Source", 1, 'uint8', 1),
-            ("Active UWB No. of Ground Nodes", 1, 'uint8', 1),
-            ("Active UWB Air Node X-Axis Position", 2, 'int16', 0.01),
-            ("Active UWB Air Node Y-Axis Position", 2, 'int16', 0.01),
-            ("Active UWB Air Node Z-Axis Position", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active UWB Ant Source",1,'uint8',1),
+            ("Active UWB No. of Ground Nodes",1,'uint8',1),
+            ("Active UWB Air Node X-Axis Position",2,'int16',0.01),
+            ("Active UWB Air Node Y-Axis Position",2,'int16',0.01),
+            ("Active UWB Air Node Z-Axis Position",2,'int16',0.01)
         ]
-        return field4111[2:]
+        return field4111, sum_bytes(field4111)
+
     # Active Nav UWB Info Data
     if msgtype == '4120':
         field4120 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("Active Nav UWB Soln Status", 2, 'uint16', 1),
-            ("Active Nav UWB Vel X", 2, 'int16', 0.01),
-            ("Active Nav UWB Vel Y", 2, 'int16', 0.01),
-            ("Active Nav UWB Pos X", 2, 'int16', 0.01),
-            ("Active Nav UWB Pos Y", 2, 'int16', 0.01),
-            ("Active Nav UWB Alt Correction", 4, 'int32', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("Active Nav UWB Soln Status",2,'uint16',1),
+            ("Active Nav UWB Vel X",2,'int16',0.01),
+            ("Active Nav UWB Vel Y",2,'int16',0.01),
+            ("Active Nav UWB Pos X",2,'int16',0.01),
+            ("Active Nav UWB Pos Y",2,'int16',0.01),
+            ("Active Nav UWB Alt Correction",4,'int32',0.01)
         ]
-        return field4120[2:]
+        return field4120, sum_bytes(field4120)
+
     # RTK System Status Info Data
     if msgtype == '4201':
         field4201 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("RTK System Status", 1, 'uint8', 1)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("RTK System Status",1,'uint8',1)
         ]
-        return field4201[2:]
+        return field4201, sum_bytes(field4201)
+
     # RTK Baseline Offset Info Data
     if msgtype == '4202':
         field4202 = [
-            ("Message Type", 2, 'uint16', 1),
-            ("Message Length", 1, 'uint8', 1),
-            ("RTK Baseline Offset X", 2, 'int16', 0.01),
-            ("RTK Baseline Offset Y", 2, 'int16', 0.01),
-            ("RTK Baseline Offset Z", 2, 'int16', 0.01),
-            ("RTK Baseline Offset Yaw", 2, 'int16', 0.01)
+            ("Message Type",2,'uint16',''),
+            ("Message Length",1,'uint8',1),
+            ("RTK Baseline Offset X",2,'int16',0.01),
+            ("RTK Baseline Offset Y",2,'int16',0.01),
+            ("RTK Baseline Offset Z",2,'int16',0.01),
+            ("RTK Baseline Offset Yaw",2,'int16',0.01)
         ]
-        return field4202[2:]
+        return field4202, sum_bytes(field4202)
+
     # Active RTK Data
     if msgtype == '4210':
         field4210 = [
@@ -835,7 +919,7 @@ def extract_dic(msgtype):
             ("Active RTK Yaw", 2, 'int16', 0.01),
             ("Active RTK Yaw Acc", 2, 'int16', 0.01)
         ]
-        return field4210[2:]
+        return field4210, sum_bytes(field4210)
     # Pri RTK Data
     if msgtype == '4211':
         field4211 = [
@@ -862,7 +946,7 @@ def extract_dic(msgtype):
             ("RTK0 Yaw", 2, 'int16', 0.01),
             ("RTK0 Yaw Acc", 2, 'int16', 0.01)
         ]
-        return field4211[2:]
+        return field4211, sum_bytes(field4211)
     # -----------------------
 # Sec RTK Data
 # -----------------------
@@ -891,7 +975,7 @@ def extract_dic(msgtype):
             ("RTK1 Yaw", 2, 'int16', 0.01),
             ("RTK1 Yaw Acc", 2, 'int16', 0.01)
         ]
-        return field4212[2:]
+        return field4212, sum_bytes(field4212)
     # Ter RTK Data
     if msgtype == '4213':
         field4213 = [
@@ -918,7 +1002,7 @@ def extract_dic(msgtype):
             ("RTK2 Yaw", 2, 'int16', 0.01),
             ("RTK2 Yaw Acc", 2, 'int16', 0.01)
         ]
-        return field4213[2:]
+        return field4213, sum_bytes(field4213)
     # Active Nav RTK Data
     if msgtype == '4220':
         field4220 = [
@@ -935,7 +1019,7 @@ def extract_dic(msgtype):
             ("Active Nav RTK Rel PosN", 4, 'int32', 0.01),
             ("Active Nav RTK Rel PosU", 4, 'int32', 0.01)
         ]
-        return field4220[2:]
+        return field4220, sum_bytes(field4220)
     # Pri IMU Nav RTK Data
     if msgtype == '4221':
         field4221 = [
@@ -950,7 +1034,8 @@ def extract_dic(msgtype):
             ("IMU0 Nav RTK Rel PosN", 4, 'int32', 0.01),
             ("IMU0 Nav RTK Rel PosU", 4, 'int32', 0.01)
         ]
-        return field4221[2:]
+        return field4221, sum_bytes(field4221)
+    # Pri IMU Nav RTK Data
     # Sec IMU Nav RTK Data
     if msgtype == '4222':
         field4222 = [
@@ -965,7 +1050,7 @@ def extract_dic(msgtype):
             ("IMU1 Nav RTK Rel PosN", 4, 'int32', 0.01),
             ("IMU1 Nav RTK Rel PosU", 4, 'int32', 0.01)
         ]
-        return field4222[2:]
+        return field4222, sum_bytes(field4222)
     # Ter IMU Nav RTK Data
     if msgtype == '4223':
         field4223 = [
@@ -980,7 +1065,7 @@ def extract_dic(msgtype):
             ("IMU2 Nav RTK Rel PosN", 4, 'int32', 0.01),
             ("IMU2 Nav RTK Rel PosU", 4, 'int32', 0.01)
         ]
-        return field4223[2:]
+        return field4223, sum_bytes(field4223)
     # RTK Base Station Info Data
     if msgtype == '4301':
         field4301 = [
@@ -1003,7 +1088,7 @@ def extract_dic(msgtype):
             ("Base Station Pitch", 2, 'int16', 0.01),
             ("Base Station Yaw", 2, 'int16', 0.01)
         ]
-        return field4301[2:]
+        return field4301, sum_bytes(field4301)
     # -----------------------
 # RFCC Status Info Data
 # -----------------------
@@ -1017,7 +1102,7 @@ def extract_dic(msgtype):
             ("Pri CBIT Bitfield", 4, 'uint32', 1),
             ("Sec CBIT Bitfield", 4, 'uint32', 1)
         ]
-        return field5001[2:]
+        return field5001, sum_bytes(field5001)
     # -----------------------
     # 15RPDB Status Info Data
     # -----------------------
@@ -1039,7 +1124,7 @@ def extract_dic(msgtype):
             ("BusB Current", 2, 'uint16', 0.01),
             ("15RPDB CBIT Bitfield", 8, 'uint64', 1)
         ]
-        return field5101[2:]
+        return field5101, sum_bytes(field5101)
     # -----------------------
     # 35RPDB Status Info Data
     # -----------------------
@@ -1065,7 +1150,7 @@ def extract_dic(msgtype):
             ("Aux Batt1 Voltage", 2, 'uint16', 0.01),
             ("Aux Batt2 Voltage", 2, 'uint16', 0.01)
         ]
-        return field5102[2:]
+        return field5102, sum_bytes(field5102)
     # -----------------------
     # Flight Info Data
     # -----------------------
@@ -1084,7 +1169,7 @@ def extract_dic(msgtype):
             ("Flight Mode Cmd Availability", 4, 'uint32', 1),
             ("UAV Status 1", 1, 'uint8', 1)
         ]
-        return field6000[2:]
+        return field6000, sum_bytes(field6000)
     # -----------------------
     # Flight Waypoint Info Data
     # -----------------------
@@ -1098,7 +1183,7 @@ def extract_dic(msgtype):
             ("Target WP Latitude", 4, 'int32', 1e-7),
             ("Target WP Longitude", 4, 'int32', 1e-7)
         ]
-        return field6001[2:]
+        return field6001, sum_bytes(field6001)
     # -----------------------
     # Flight Plan Status Info Data
     # -----------------------
@@ -1113,7 +1198,7 @@ def extract_dic(msgtype):
             ("ELP ID", 4, 'uint32', 1),
             ("Syncing Status", 2, 'uint16', 1)
         ]
-        return field6002[2:]
+        return field6002, sum_bytes(field6002)
     # -----------------------
     # Flight Time Info Data
     # -----------------------
@@ -1127,7 +1212,7 @@ def extract_dic(msgtype):
             ("ETA Time (Reserved)", 2, 'uint16', 1),
             ("Battery Discharge Boundary Time", 2, 'uint16', 1)
         ]
-        return field6003[2:]
+        return field6003, sum_bytes(field6003)
 # -----------------------
 # Subsystem Status Info Data
 # -----------------------
@@ -1137,7 +1222,7 @@ def extract_dic(msgtype):
             ("Message Length", 1, 'uint8', 1),
             ("Subsystem Status", 1, 'uint8', 1)
         ]
-        return field6101[2:]
+        return field6101, sum_bytes(field6101)
     # -----------------------
     # Joysticks Info Data
     # -----------------------
@@ -1150,7 +1235,7 @@ def extract_dic(msgtype):
             ("Joystick Cmd Yaw", 2, 'int16', 0.01),
             ("Joystick Cmd Height", 2, 'int16', 0.01)
         ]
-        return field6102[2:]
+        return field6102, sum_bytes(field6102)
     # -----------------------
     # LTE Radio Info Data
     # -----------------------
@@ -1167,7 +1252,7 @@ def extract_dic(msgtype):
             ("Pri Telco (wwan0)", 2, 'uint16', 1),
             ("Sec Telco (wwan1)", 2, 'uint16', 1)
         ]
-        return field9F01[2:]
+        return field9F01, sum_bytes(field9F01)
     # -----------------------
     # Active Battery Data Source
     # -----------------------
@@ -1182,7 +1267,7 @@ def extract_dic(msgtype):
             ("Battery Health", 1, 'uint8', 1),
             ("Battery Voltage Data Source", 1, 'uint8', 1)
         ]
-        return fieldA000[2:]
+        return fieldA000, sum_bytes(fieldA000)
     # -----------------------
     # Battery 1 BMS Data
     # -----------------------
@@ -1220,7 +1305,7 @@ def extract_dic(msgtype):
             ("Battery 1 Temperature Sensor 3", 2, 'int16', 0.1),
             ("Battery 1 Temperature Sensor 4", 2, 'int16', 0.1)
         ]
-        return fieldA001[2:]
+        return fieldA001, sum_bytes(fieldA001)
     # -----------------------
     # Battery 2 BMS Data
     # -----------------------
@@ -1258,7 +1343,7 @@ def extract_dic(msgtype):
             ("Battery 2 Temperature Sensor 3", 2, 'int16', 0.1),
             ("Battery 2 Temperature Sensor 4", 2, 'int16', 0.1)
         ]
-        return fieldA002[2:]
+        return fieldA002, sum_bytes(fieldA002)
     # -----------------------
     # Winch Info Data
     # -----------------------
@@ -1273,7 +1358,7 @@ def extract_dic(msgtype):
             ("Winch Cutter Board Status", 1, 'uint8', 1),
             ("Winch FCC Cmd", 1, 'uint8', 1)
         ]
-        return fieldA003[2:]               
+        return fieldA003, sum_bytes(fieldA003)               
     # -----------------------
     # Downward Lidar Data
     # -----------------------
@@ -1287,7 +1372,7 @@ def extract_dic(msgtype):
             ("Temperature", 1, 'int8', 1),
             ("Landing Status Bitfield", 1, 'uint8', 1)
         ]
-        return fieldA100[2:]  
+        return fieldA100, sum_bytes(fieldA100) 
     # -----------------------
     # Software Version Info Data
     # -----------------------
@@ -1298,7 +1383,7 @@ def extract_dic(msgtype):
             ("Major Version No.", 1, 'uint8', 1),
             ("Minor Version No.", 1, 'uint8', 1)
         ]
-        return fieldF001[2:] 
+        return fieldF001, sum_bytes(fieldF001) 
     # -----------------------
     # Aircraft Config Info Data
     # -----------------------
@@ -1308,7 +1393,7 @@ def extract_dic(msgtype):
             ("Message Length", 1, 'uint8', 1),
             ("Aircraft Configuration Bitfield", 1, 'uint8', 1)
         ]
-        return fieldF002[2:] 
+        return fieldF002, sum_bytes(fieldF002)
     # -----------------------
     # Config Params Info Data
     # -----------------------
@@ -1323,7 +1408,7 @@ def extract_dic(msgtype):
             ("Cal Value", 4, 'float32', 1),
             ("Cal Written Flag", 1, 'uint8', 1)
         ]
-        return fieldF003[2:] 
+        return fieldF003, sum_bytes(fieldF003)
     # -----------------------
     # Engineering Data
     # -----------------------
@@ -1344,4 +1429,4 @@ def extract_dic(msgtype):
             ("Engineering Data 11", 4, 'int32', 1),
             ("Engineering Data 12", 4, 'int32', 1)
         ]
-        return fieldFFFF[2:] 
+        return fieldFFFF, sum_bytes(fieldFFFF)
